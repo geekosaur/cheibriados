@@ -86,13 +86,16 @@ my %colour_codes = (
 sub make_commit_uri {
     my $self = shift;
     my $commit = shift;
-    return "http://s-z.org/neil/git/?p=crawl.git;a=commitdiff;h=$commit";
+    return "https://github.com/crawl/crawl/commit/$commit";
 }
 
 sub make_branch_uri {
     my $self = shift;
     my $branch = shift;
-    return "http://s-z.org/neil/git/?p=crawl.git;a=log;h=refs/heads/$branch";
+    if ($branch !~ /^pull\//) {
+        $branch = "tree/$branch";
+    }
+    return "https://github.com/crawl/crawl/$branch";
 }
 
 sub colour {
@@ -162,7 +165,8 @@ sub said {
             $self->say(@keys, "Could not find commit $rev (git returned $ev)");
         }
     } elsif ($args->{body} =~ /^\%branch\s+(.*)$/) {
-        $self->say(@keys, "Branch $1: " . $self->make_branch_uri($1));
+        $self->say(@keys, "Branch $1: " . $self->colour(query => "url")
+                          . $self->make_branch_uri($1));
     }
 }
 
@@ -188,7 +192,9 @@ sub tick {
         if (!$self->has_branch($branch)) {
             my $nrev = scalar @revs;
             my $pl = $nrev == 1 ? "" : "s";
-            $self->say_all("New branch created: $branch ($nrev commit$pl)");
+            $self->say_all("New branch created: $branch ($nrev commit$pl) "
+                    . $self->colour(announce => "url")
+                    . $self->make_branch_uri($branch));
         }
 
         # Announce playable branches in ##crawl, all branches in ##crawl-dev.
