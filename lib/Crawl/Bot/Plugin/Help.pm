@@ -7,8 +7,17 @@ sub said {
     my $self = shift;
     my ($args) = @_;
 
-    if ($args->{body} =~ /^\%(help|source)/) {
+    if ($args->{body} =~ /^\%(clone|repo)/) {
         my $msg = "http://s-z.org/neil/git/cheibriados.git http://s-z.org/neil/git/monster-trunk.git https://github.com/crawl/crawl.git";
+
+        my %keys = (
+            who => $args->{who},
+            channel => $args->{channel},
+            "body" => $msg
+        );
+        $self->say(%keys);
+    } elsif ($args->{body} =~ /^\%(help|source)/) {
+        my $msg = "http://s-z.org/neil/git/?p=cheibriados.git http://s-z.org/neil/git/?p=monster-trunk.git https://github.com/crawl/crawl/";
 
         my %keys = (
             who => $args->{who},
