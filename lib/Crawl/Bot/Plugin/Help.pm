@@ -8,7 +8,7 @@ sub said {
     my ($args) = @_;
 
     if ($args->{body} =~ /^\%(help|source)/) {
-        my $msg = "http://s-z.org/neil/git/cheibriados.git http://s-z.org/neil/git/monster-trunk.git git://gitorious.org/crawl/crawl.git";
+        my $msg = "http://s-z.org/neil/git/cheibriados.git http://s-z.org/neil/git/monster-trunk.git https://github.com/crawl/crawl.git";
 
         my %keys = (
             who => $args->{who},
