@@ -8,7 +8,7 @@ sub said {
     my ($args) = @_;
 
     if ($args->{body} =~ /^\%(clone|repo)/) {
-        my $msg = "http://s-z.org/neil/git/cheibriados.git http://s-z.org/neil/git/monster-trunk.git https://github.com/crawl/crawl.git";
+        my $msg = "http://s-z.org/neil/git/cheibriados.git https://github.com/crawl/monster/ https://github.com/crawl/crawl/";
 
         my %keys = (
             who => $args->{who},
@@ -17,7 +17,7 @@ sub said {
         );
         $self->say(%keys);
     } elsif ($args->{body} =~ /^\%(help|source)/) {
-        my $msg = "http://s-z.org/neil/git/?p=cheibriados.git http://s-z.org/neil/git/?p=monster-trunk.git https://github.com/crawl/crawl/";
+        my $msg = "http://s-z.org/neil/git/?p=cheibriados.git https://github.com/crawl/monster/ https://github.com/crawl/crawl/";
 
         my %keys = (
             who => $args->{who},
