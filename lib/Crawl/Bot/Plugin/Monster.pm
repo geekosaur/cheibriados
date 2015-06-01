@@ -12,15 +12,9 @@ sub said {
     my ($args) = @_;
     my @keys = (who => $args->{who}, channel => $args->{channel}, "body");
 
-    if ($args->{body} =~ /^%(\?|0\.(\d+)|)\? *([^?].*)/) {
+    if ($args->{body} =~ /^%(\?|0\.\d+|)\? *([^?].*)/) {
         my $branch = ($1 eq "?") ? "trunk" : ($1 || "stable");
-        my $resp;
-        if ($branch eq "trunk" or $branch eq "stable" or $2 >= 16) {
-                $resp = "For newer versions, use @?? to query Gretell.";
-        } else {
-                $resp = $self->get_monster_info($3, $branch);
-        }
-
+        my $resp = $self->get_monster_info($2, $branch);
         if ($resp) {
             $self->say(@keys, $resp);
         } else {
