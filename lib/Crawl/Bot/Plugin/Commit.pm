@@ -236,7 +236,10 @@ sub tick {
                             last;
                         }
                         my $commit = $commits{$rev};
-                        my $br = $branch eq "master" ? "" : "[$branch] ";
+                        my $br = $branch eq "master" ? ""
+                               : $branch =~ /^pull\//
+                                 ? ($self->make_branch_uri($branch) . " ")
+                               : "[$branch] ";
 
                         my $abbr = substr($commit->{hash}, 0, 12);
                         my $pl = ($commit->{nfiles} == 1 ? "" : "s");
