@@ -1,7 +1,7 @@
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
 wensleysubmit = function() {
-    logurl = '%23%23crawl-dev-' + $('input#date').val() + '.log';
+    logurl = '%23%23crawl-dev-' + $('input#date').val() + '.lg';
     wensley(logurl, {});
 }
 wensleysearch = function() {

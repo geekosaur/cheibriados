@@ -3,6 +3,7 @@ IndexOrderDefault Descending Name
 IndexIgnore .*
 IndexIgnore crawl-dev.log.concat
 AddType text/plain .log
+AddType text/plain .lg
 AddType text/html .shtml
 AddOutputFilter INCLUDES .shtml
 AddHandler cgi-script .concat

@@ -12,7 +12,7 @@ my $case = $q->param("cs") ? "" : "i";
 my @dlhead = ();
 
 $q->param("download") and @dlhead = (
-	-Content_disposition => "attachment; filename = crawl-dev-search.log"
+	-Content_disposition => "attachment; filename = crawl-dev-search.lg"
 );
 
 print $q->header({ -type => 'text/plain', -encoding => 'UTF-8', @dlhead });
@@ -29,7 +29,7 @@ if ($@) {
 }
 
 my $matching_files=0;
-FILE: for my $logf (reverse <*.log>) {
+FILE: for my $logf (reverse <*.lg>) {
 	my $f = new IO::File $logf, "<:encoding(UTF-8)";
 	unless (defined $f) {
 		print "skipping $logf: $!\n";

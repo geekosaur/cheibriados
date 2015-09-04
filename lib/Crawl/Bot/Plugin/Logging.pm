@@ -29,7 +29,7 @@ has logfile => (
     clearer => 'clear_logfile',
     default => sub {
         my $self = shift;
-        my $filepath = File::Spec->catfile($self->logfilepath, ($self->bot->channels)[0] . '-' . $self->date . '.log');
+        my $filepath = File::Spec->catfile($self->logfilepath, ($self->bot->channels)[0] . '-' . $self->date . '.lg');
         open my $fh, '>>', $filepath;
         $fh->autoflush(1);
         return $fh;
