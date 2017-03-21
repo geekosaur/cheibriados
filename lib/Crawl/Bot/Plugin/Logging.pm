@@ -85,26 +85,6 @@ sub emoted {
     return;
 }
 
-sub chanjoin {
-    my $self = shift;
-    my ($args) = @_;
-
-    if ($args->{channel} eq $self->bot->{channels}[0]) {
-        $self->log_message("-!- $args->{who} has joined $args->{channel}");
-    }
-    return;
-}
-
-sub chanpart {
-    my $self = shift;
-    my ($args) = @_;
-
-    if ($args->{channel} eq $self->bot->{channels}[0]) {
-        $self->log_message("-!- $args->{who} has left $args->{channel}");
-    }
-    return;
-}
-
 sub nick_change {
     my $self = shift;
     # bleh... uses different arg format
@@ -136,14 +116,6 @@ sub topic {
     else {
         $self->log_message("-!- The topic of $args->{channel} is: $args->{topic}");
     }
-    return;
-}
-
-sub userquit {
-    my $self = shift;
-    my ($args) = @_;
-
-    $self->log_message("-!- $args->{who} has quit [$args->{body}]");
     return;
 }
 
