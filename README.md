@@ -8,6 +8,8 @@ You will need to install from CPAN:
  * Module::Pluggable
  * POE::Component::SSLify (if you want to connect with SSL)
 
+# Configuration
+
 The repo is configured for the official Cheibriados bot. To change this:
 
  * Edit the channel names and nick in `bin/run`.
@@ -24,3 +26,11 @@ and add `ssl => 1` to the list of properties in `bin/run`. For example:
         nick     => 'FakeCheibriados',
         name     => 'FakeCheibriados the Crawl Bot',
     )->run;
+
+To use nickserv, put the password in plaintext in a file called `.password` in
+the root directory of the repository. Needless to say, this is not a secure
+way of storing passwords.
+
+# Running
+
+From the root directory of the repository, call `bin/run`.

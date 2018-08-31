@@ -51,6 +51,20 @@ has max_length => (
     default => 410
 );
 
+sub connected {
+  my $self = shift;
+
+  open(my $handle, '<', '.password') or warn "Unable to read .password: $!" and return undef;
+  my $password = <$handle>;
+  chomp $password;
+
+  $self->say(channel => 'msg',
+             who     => 'nickserv',
+             body    => "identify $password");
+
+  return undef;
+}
+
 sub BUILD {
     my $self = shift;
     File::Path::mkpath($self->data_dir);
@@ -60,7 +74,7 @@ sub BUILD {
 before say => sub {
     my $self = shift;
     my %params = @_;
-    warn "sending '$params{body}' to $params{channel}";
+    print STDERR "sending '$params{body}' to $params{channel}\n";
     $_->sent({%params, who => $self->nick}) for @{ $self->plugins };
 };
 
