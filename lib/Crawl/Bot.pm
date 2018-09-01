@@ -71,11 +71,19 @@ sub BUILD {
     $self->plugins;
 }
 
-before say => sub {
-    my $self = shift;
-    my %params = @_;
+around say => sub {
+    my $next = shift;
+    my ($self, %params) = @_;
+    # don't talk in main channels unless we're the real thing
+    if ($self->nick ne "Cheibriados" &&
+                ($params{channel} eq "##crawl-dev"
+                 || $params{channel} eq "##crawl"))
+    {
+        return undef;
+    }
     print STDERR "sending '$params{body}' to $params{channel}\n";
     $_->sent({%params, who => $self->nick}) for @{ $self->plugins };
+    $next->($self, %params);
 };
 
 my $tickcount = 0;

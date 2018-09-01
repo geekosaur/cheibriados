@@ -8,7 +8,7 @@ Crawl::Bot->new(
     server   => 'chat.freenode.net',
     port     => 6697,
     ssl      => 1,
-    channels => ['##crawl-dev', '##crawl'],
-    nick     => 'Cheibriados',
-    name     => 'Cheibriados the Crawl Bot',
+    channels => ['##crawl-bot'], # '##crawl-dev', '##crawl', 
+    nick     => 'CheibriadosDev',
+    name     => 'Development version of Cheibriados the Crawl Bot',
 )->run();
