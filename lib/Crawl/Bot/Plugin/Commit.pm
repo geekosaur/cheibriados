@@ -175,11 +175,13 @@ sub tick {
     my $dir = pushd($self->checkout);
     warn "fetch";
     system('git fetch');
+    my @seen_branches = ( );
     for my $branch ($self->branches) {
         my $old_head = $self->head($branch) || '';
         warn "rev-parse $branch";
         my $head = `git rev-parse $branch`;
         chomp ($old_head, $head);
+        push(@seen_branches, $branch);
         next if $old_head eq $head;
 
         # Exclude merges from master into other branches.
@@ -210,6 +212,22 @@ sub tick {
         }
 
         if ($self->announce_commits) {
+                my $skip_branch = 0;
+                # find any PR branches that may have also been updated at the
+                # same time. (Nothing specific about PRs to this check, but
+                # non-PR-branches meeting this condition is probably very rare.)
+                for my $seen_branch (@seen_branches) {
+                    if ($seen_branch ne $branch && $self->head($seen_branch) eq $head) {
+                        $say->("Branch $branch updated to be equal with $seen_branch: "
+                            . $self->colour(announce => "url")
+                            . $self->make_branch_uri($branch));
+                        $self->head($branch => $head);
+                        $skip_branch = 1;
+                        last;
+                    }
+                }
+                next if $skip_branch;
+
                 my %commits = map { $_, $self->parse_commit($_) } @revs;
 
                 if ($self->abbrev_cherry_picks)
@@ -283,7 +301,12 @@ sub tick {
 sub branches {
     my $self = shift;
     my $dir = pushd($self->checkout);
-    return map { s/^[ \*]*//; $_ } split /\n/, `git branch`;
+    my @raw_branches = map { s/^[ \*]*//; $_ } split /\n/, `git branch`;
+    # order regular branches before PRs
+    my @result = ( );
+    push(@result, grep { $_ !~ /^pull\// } @raw_branches);
+    push(@result, grep { /^pull\// } @raw_branches);
+    return @result;
 }
 
 sub parse_commit {
