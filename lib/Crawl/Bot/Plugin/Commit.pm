@@ -53,7 +53,7 @@ has checkout => (
         mkdir $checkout unless -d $checkout;
         my $dir = pushd($checkout);
         if (!-f 'HEAD') {
-            system('git clone --mirror ' . $self->repo_uri . " $checkout");
+            system('git clone --config remote.origin.fetch=+refs/pull/*/head:refs/heads/pull/* --mirror ' . $self->repo_uri . ".git" . " $checkout");
         }
         $checkout;
     },
@@ -86,7 +86,7 @@ my %colour_codes = (
 sub make_commit_uri {
     my $self = shift;
     my $commit = shift;
-    return "https://github.com/crawl/crawl/commit/$commit";
+    return $self->repo_uri . "/commit/$commit";
 }
 
 sub make_branch_uri {
@@ -95,7 +95,7 @@ sub make_branch_uri {
     if ($branch !~ /^pull\//) {
         $branch = "tree/$branch";
     }
-    return "https://github.com/crawl/crawl/$branch";
+    return $self->repo_uri . "/$branch";
 }
 
 sub colour {

@@ -21,7 +21,7 @@ sub join_all_channels {
 sub said {
     my ($self, $m) = @_;
     if (is_nickserv_auth_ack($m)) {
-        print STDERR "authenticated; joining all channels\n";
+        print STDERR "authenticated; joining all channels at " . localtime() . "\n";
         $self->join_all_channels();
     }
     return undef;
