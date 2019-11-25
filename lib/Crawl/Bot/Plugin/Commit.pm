@@ -7,7 +7,7 @@ extends 'Crawl::Bot::Plugin';
 has repo_uri => (
     is      => 'ro',
     isa     => 'Str',
-    default => 'https://github.com/crawl/crawl.git',
+    default => 'https://github.com/crawl/crawl',
 );
 
 has announce_commits => (
