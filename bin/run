@@ -5,7 +5,7 @@ use lib 'lib';
 use Crawl::Bot;
 
 Crawl::Bot->new(
-    server   => 'chat.freenode.net',
+    server   => 'irc.libera.chat',
     port     => 6697,
     ssl      => 1,
     channels => ['##crawl-bot'], # '##crawl-dev', '##crawl', 
