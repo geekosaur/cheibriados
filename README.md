@@ -1,11 +1,12 @@
 # Installation
 
-You will need to install from CPAN:
+You will need to install from CPAN at least the following packages:
 
  * Bot::BasicBot
  * File::pushd
- * XML::RAI
+ * XML::RAI, XML::RPC, and XML::SAX
  * Module::Pluggable
+ * MooseX::NonMoose
  * POE::Component::SSLify (if you want to connect with SSL)
 
 # Configuration
@@ -24,10 +25,10 @@ To enable SSL on the bot's connection, make sure you choose the correct port,
 and add `ssl => 1` to the list of properties in `bin/run`. For example:
 
     Crawl::Bot->new(
-        server   => 'chat.freenode.net',
+        server   => 'irc.libera.chat',
         port     => 6697,
         ssl      => 1,
-        channels => ['##crawl-dev'],
+        channels => ['#crawl-dev'],
         nick     => 'FakeCheibriados',
         name     => 'FakeCheibriados the Crawl Bot',
     )->run;
