@@ -179,6 +179,7 @@ sub tick {
     my %branch_refs = map {chomp; split /\s/} `git for-each-ref --sort=-committerdate refs/heads/ --format="%(refname:short) %(objectname)"`;
     my @seen_branches = ( );
     my $updated_count = 0;
+    my $total_count = 0;
     for my $branch ($self->branches) {
         my $old_head = $self->head($branch) || '';
         my $head = $branch_refs{$branch} || '';
@@ -253,6 +254,13 @@ sub tick {
                         # If it's just one more than the announce limit, don't
                         # bother with the message and announce the last commit
                         # anyway.
+                        if (++$total_count > $self->announce_limit * 4) {
+                            $say->("Too many commits, shutting up!");
+                            # suppress $say for the rest of the tick. Everything
+                            # outside of this loop still runs.
+                            $say = sub { };
+                            last;
+                        }
                         if (++$count > $self->announce_limit and scalar @revs > $count) {
                             $say->("... and " . (scalar @revs - $count + 1) . " more commits");
                             last;
