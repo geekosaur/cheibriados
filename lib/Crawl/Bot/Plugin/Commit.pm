@@ -173,16 +173,20 @@ sub said {
 sub tick {
     my $self = shift;
     my $dir = pushd($self->checkout);
-    warn "fetch";
+    warn "\nfetch";
     system('git fetch');
+    # TODO: sort is dropped, could use it
+    my %branch_refs = map {chomp; split /\s/} `git for-each-ref --sort=-committerdate refs/heads/ --format="%(refname:short) %(objectname)"`;
     my @seen_branches = ( );
+    my $updated_count = 0;
     for my $branch ($self->branches) {
         my $old_head = $self->head($branch) || '';
-        warn "rev-parse $branch";
-        my $head = `git rev-parse $branch`;
-        chomp ($old_head, $head);
+        my $head = $branch_refs{$branch} || '';
+        chomp($old_head, $head);
         push(@seen_branches, $branch);
         next if $old_head eq $head;
+        warn "Updating branch $branch";
+        $updated_count++;
 
         # Exclude merges from master into other branches.
         my $exclude_master = $branch eq "master" ? "" : "^master";
@@ -296,6 +300,8 @@ sub tick {
 
         $self->head($branch => $head);
     }
+    my $skipped_count = (scalar keys %branch_refs) - $updated_count;
+    warn("$updated_count branches updated, $skipped_count skipped");
 }
 
 sub branches {
