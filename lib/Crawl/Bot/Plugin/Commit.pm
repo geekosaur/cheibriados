@@ -173,16 +173,21 @@ sub said {
 sub tick {
     my $self = shift;
     my $dir = pushd($self->checkout);
-    warn "fetch";
+    warn "\nfetch";
     system('git fetch');
+    # TODO: sort is dropped, could use it
+    my %branch_refs = map {chomp; split /\s/} `git for-each-ref --sort=-committerdate refs/heads/ --format="%(refname:short) %(objectname)"`;
     my @seen_branches = ( );
+    my $updated_count = 0;
+    my $total_count = 0;
     for my $branch ($self->branches) {
         my $old_head = $self->head($branch) || '';
-        warn "rev-parse $branch";
-        my $head = `git rev-parse $branch`;
-        chomp ($old_head, $head);
+        my $head = $branch_refs{$branch} || '';
+        chomp($old_head, $head);
         push(@seen_branches, $branch);
         next if $old_head eq $head;
+        warn "Updating branch $branch";
+        $updated_count++;
 
         # Exclude merges from master into other branches.
         my $exclude_master = $branch eq "master" ? "" : "^master";
@@ -249,6 +254,13 @@ sub tick {
                         # If it's just one more than the announce limit, don't
                         # bother with the message and announce the last commit
                         # anyway.
+                        if (++$total_count > $self->announce_limit * 4) {
+                            $say->("Too many commits, shutting up!");
+                            # suppress $say for the rest of the tick. Everything
+                            # outside of this loop still runs.
+                            $say = sub { };
+                            last;
+                        }
                         if (++$count > $self->announce_limit and scalar @revs > $count) {
                             $say->("... and " . (scalar @revs - $count + 1) . " more commits");
                             last;
@@ -296,6 +308,8 @@ sub tick {
 
         $self->head($branch => $head);
     }
+    my $skipped_count = (scalar keys %branch_refs) - $updated_count;
+    warn("$updated_count branches updated, $skipped_count skipped");
 }
 
 sub branches {
