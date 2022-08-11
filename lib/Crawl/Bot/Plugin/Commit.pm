@@ -216,7 +216,7 @@ sub tick {
 #            }
 #        }
 
-        if ($self->announce_commits) {
+        if ($self->announce_commits && ($branch !~ m,^pull/, || !$self->has_branch($branch))) {
                 my $skip_branch = 0;
                 # find any PR branches that may have also been updated at the
                 # same time. (Nothing specific about PRs to this check, but
