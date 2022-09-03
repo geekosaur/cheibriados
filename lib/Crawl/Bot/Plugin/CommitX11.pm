@@ -125,7 +125,7 @@ sub said {
 
     my @keys = (who => $args->{who}, channel => $args->{channel}, "body");
 
-    if ($args->{body} =~ /^\%git[Xx](?:11)?(?:\s+(.*))?$/) {
+    if ($args->{body} =~ /^\%git(?:[Xx](?:11)?|all)(?:\s+(.*))?$/) {
         my $rev = $1;
         $rev = "HEAD" unless $rev;
         my $commit = $self->parse_commit($rev);
