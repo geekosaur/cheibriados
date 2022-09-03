@@ -1,4 +1,4 @@
-package Crawl::Bot::Plugin::CommitContrib;
+package Crawl::Bot::Plugin::CommitX11;
 use Moose;
 use autodie;
 use File::pushd;
@@ -7,7 +7,7 @@ extends 'Crawl::Bot::Plugin';
 has repo_uri => (
     is      => 'ro',
     isa     => 'Str',
-    default => 'https://github.com/xmonad/xmonad-contrib',
+    default => 'https://github.com/xmonad/X11',
 );
 
 has announce_commits => (
@@ -49,7 +49,7 @@ has checkout => (
     lazy    => 1,
     default => sub {
         my $self = shift;
-        my $checkout = File::Spec->catdir($self->data_dir, 'xmonad-contrib');
+        my $checkout = File::Spec->catdir($self->data_dir, 'X11');
         mkdir $checkout unless -d $checkout;
         my $dir = pushd($checkout);
         if (!-f 'HEAD') {
@@ -125,7 +125,7 @@ sub said {
 
     my @keys = (who => $args->{who}, channel => $args->{channel}, "body");
 
-    if ($args->{body} =~ /^\%gitc(?:ontrib)?(?:\s+(.*))?$/) {
+    if ($args->{body} =~ /^\%git[Xx](?:11)?(?:\s+(.*))?$/) {
         my $rev = $1;
         $rev = "HEAD" unless $rev;
         my $commit = $self->parse_commit($rev);
@@ -141,7 +141,7 @@ sub said {
 
             $self->say(@keys,
                 sprintf(
-                    "xmonad-contrib %s%s%s%s%s%s * %s%s%s:%s %s%s%s %s(%s, %s file%s, %s+ %s-)%s %s%s%s",
+                    "X11 %s%s%s%s%s%s * %s%s%s:%s %s%s%s %s(%s, %s file%s, %s+ %s-)%s %s%s%s",
                     $self->colour(query => "author_query"), $commit->{author},
                     $self->colour(query => "reset"),
                     $self->colour(query => "committer"), $committer,
@@ -165,7 +165,7 @@ sub said {
             $self->say(@keys, "Could not find commit $rev (git returned $ev)");
         }
     } elsif ($args->{body} =~ /^\%branch\s+(.*)$/) {
-        $self->say(@keys, "xmonad-contrib Branch $1: " . $self->colour(query => "url")
+        $self->say(@keys, "X11 Branch $1: " . $self->colour(query => "url")
                           . $self->make_branch_uri($1));
     }
 }
@@ -199,7 +199,7 @@ sub tick {
         if (!$self->has_branch($branch)) {
             my $nrev = scalar @revs;
             my $pl = $nrev == 1 ? "" : "s";
-            $self->say_all("New xmonad-contrib branch created: $branch ($nrev commit$pl) "
+            $self->say_all("X11 New branch created: $branch ($nrev commit$pl) "
                     . $self->colour(announce => "url")
                     . $self->make_branch_uri($branch));
         }
@@ -223,7 +223,7 @@ sub tick {
                 # non-PR-branches meeting this condition is probably very rare.)
                 for my $seen_branch (@seen_branches) {
                     if ($seen_branch ne $branch && $self->head($seen_branch) eq $head) {
-                        $say->("xmonad-contrib branch $branch updated to be equal with $seen_branch: "
+                        $say->("X11 branch $branch updated to be equal with $seen_branch: "
                             . $self->colour(announce => "url")
                             . $self->make_branch_uri($branch));
                         $self->head($branch => $head);
@@ -245,7 +245,7 @@ sub tick {
                     $cherry_picks -= @revs;
                     my $pl = $cherry_picks == 1 ? "" : "s";
 
-                    $say->("xmonad-contrib cherry-picked $cherry_picks commit$pl into $branch")
+                    $say->("X11 cherry-picked $cherry_picks commit$pl into $branch")
                         if $cherry_picks > 0;
                 }
 
@@ -282,7 +282,7 @@ sub tick {
 
                         $say->(
                             sprintf(
-                                "xmonad-contrib %s%s%s%s%s%s %s%s%s* %s%s%s:%s %s%s%s %s(%s, %s file%s, %s+ %s-)%s %s%s%s",
+                                "X11 %s%s%s%s%s%s %s%s%s* %s%s%s:%s %s%s%s %s(%s, %s file%s, %s+ %s-)%s %s%s%s",
                                 $self->colour(announce => "author"), $commit->{author},
                                 $self->colour(announce => "reset"),
                                 $self->colour(announce => "committer"), $committer,

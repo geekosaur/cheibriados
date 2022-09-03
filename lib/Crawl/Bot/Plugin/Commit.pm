@@ -165,7 +165,7 @@ sub said {
             $self->say(@keys, "Could not find commit $rev (git returned $ev)");
         }
     } elsif ($args->{body} =~ /^\%branch\s+(.*)$/) {
-        $self->say(@keys, "Branch $1: " . $self->colour(query => "url")
+        $self->say(@keys, "xmonad Branch $1: " . $self->colour(query => "url")
                           . $self->make_branch_uri($1));
     }
 }
