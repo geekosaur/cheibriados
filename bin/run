@@ -8,7 +8,7 @@ Crawl::Bot->new(
     server   => 'irc.libera.chat',
     port     => 6697,
     ssl      => 1,
-    channels => ['#xmonad'], # '##crawl-dev', '##crawl', 
+    channels => ['#xmonad', '#xmonad-unlogged'],
     nick     => 'xmonadtrack',
     name     => 'the Crawl Bot modified for XMonad, owned by geekosaur',
 )->run();
