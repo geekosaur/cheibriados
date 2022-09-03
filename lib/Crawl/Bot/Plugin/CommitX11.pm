@@ -164,9 +164,6 @@ sub said {
             my $ev = $? >> 8;
             $self->say(@keys, "Could not find commit $rev (git returned $ev)");
         }
-    } elsif ($args->{body} =~ /^\%branch\s+(.*)$/) {
-        $self->say(@keys, "X11 Branch $1: " . $self->colour(query => "url")
-                          . $self->make_branch_uri($1));
     }
 }
 
