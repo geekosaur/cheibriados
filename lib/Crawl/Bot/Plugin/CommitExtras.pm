@@ -203,15 +203,15 @@ sub tick {
 
         # Announce playable branches in ##crawl, all branches in ##crawl-dev.
         my $say;
-#        if ($branch =~ /^(?:master|stone_soup-.*)$/) {
+        if ($branch eq 'master') {
             $say = sub {
                 $self->say_all(@_)
             };
-#        } else {
-#            $say = sub {
-#                $self->say_main(@_)
-#            }
-#        }
+        } else {
+            $say = sub {
+                $self->say_main(@_)
+            }
+        }
 
         if ($self->announce_commits && ($branch !~ m,^pull/, || !$self->has_branch($branch))) {
                 my $skip_branch = 0;
